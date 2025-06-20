@@ -3,6 +3,7 @@ class Skill:
         self.name=name
         self.apply_effect=apply_effect
 
+
 def bullet_wider(ai_settings,stats):
     ai_settings.bullet_width+=100
 
@@ -25,31 +26,12 @@ def more_bullets(ai_settings,stats):
     stats.ammo+=2
 
 
-skills_poll=[Skill("your bullets will be wider",bullet_wider()),Skill("your bullets will be faster",bullet_faster()),Skill("hurt of bullet increase",hurt_increase())]
+skills_poll=[Skill("your bullets will be wider",bullet_wider),
+             Skill("your bullets will be faster",bullet_faster),
+             Skill("hurt of bullet increase",hurt_increase),
+             Skill('your ship moves faster',ship_move_faster),
+             Skill('have more ships',more_ships),
+             Skill('have more bullets',more_bullets)]
 
-def show_skill_selection(player):
-    import random
-    import pygame
 
-    selected_skills = random.sample(skills_pool, 3)
 
-    # 显示简单文字按钮选择
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        font = pygame.font.SysFont(None, 32)
-
-        for i, skill in enumerate(selected_skills):
-            text = font.render(f"{i+1}. {skill.name} - {skill.description}", True, (255, 255, 255))
-            screen.blit(text, (50, 100 + i * 50))
-
-        pygame.display.flip()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:
-                    index = event.key - pygame.K_1
-                    selected_skills[index].apply_effect(player)
-                    running = False

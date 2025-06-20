@@ -10,6 +10,8 @@ from alien import Alien
 
 from bullet_alien import BulletAlien
 
+from skill import skills_poll
+
 def check_events(ship,ai_settings,screen,bullets,aliens,stats,play_button,sb):#响应鼠标和键盘事件
     for event in pygame.event.get():  # 侦听事件，构建事件循环
         if event.type == pygame.QUIT:
@@ -143,6 +145,7 @@ def check_bullet_alien_collisions(ai_settings,screen,ship,aliens,bullets,stats,s
         #提高等级并调用函数更新等级图像
         stats.level+=1
         stats.ammo+=1
+        get_skill(ai_settings,stats)
 
         sb.prep_ammo()
         sb.prep_level()
@@ -154,7 +157,7 @@ def check_bullet_alien_collisions(ai_settings,screen,ship,aliens,bullets,stats,s
 def create_fleet(ai_settings,screen,ship,aliens,stats):
     """创建外星人群"""
     #创建一个外星人，然后计算一行可容纳多少个
-    numbers=stats.level*3
+    numbers=stats.level*3 if stats.level<8 else 20
     #创建一群
     for number in range(numbers):
         create_random_alien(ai_settings,screen,aliens,ship.rect.height)
@@ -258,6 +261,11 @@ def check_high_score(stats,sb):
         stats.high_score=stats.score
         sb.prep_high_score()
     sb.show_score()
+
+def get_skill(ai_settings,stats):
+    chosen_skill=random.choice(skills_poll)
+    chosen_skill.apply_effect(ai_settings,stats)
+
 
 
 
